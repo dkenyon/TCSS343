@@ -15,11 +15,13 @@ public class Testing {
 	public static int[][] SIZE400ARRAY = new int[400][400];
 	public static int[][] SIZE600ARRAY = new int[600][600];
 	public static int[][] SIZE800ARRAY = new int[800][800];
+	public static int[][] SIZE10ARRAY = new int[10][10];
 	
 	public static void main (final String[] theArgs) throws FileNotFoundException {
 		
 		initializeArrays(); 
-		printArrayToConsole(SIZE100ARRAY); //prints to console to test it
+		generateRandomArray(SIZE10ARRAY);
+		printArrayToConsole(SIZE10ARRAY);
 		
 	}
 	
