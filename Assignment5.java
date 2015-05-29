@@ -165,7 +165,7 @@ public class Testing {
 				} else if (i > j) {
 					theArray[i][j] = -1;
 				} else {
-					theArray[i][j] = random.nextInt(10);
+					theArray[i][j] = 1+ random.nextInt(100); //generates random int 1-100
 				}
 			}
 		}
