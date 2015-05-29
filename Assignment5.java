@@ -21,9 +21,18 @@ public class Testing {
 	public static void main(final String[] theArgs) throws FileNotFoundException {
 
 		// initializeArrays();
-		generateRandomArray(SIZE15ARRAY);
-		printArrayToConsole(SIZE15ARRAY);
-		dynamicProgramming(SIZE15ARRAY);
+		int[][] array = {
+				{0, 3, 8, 4, 7},
+				{-1, 0, 2, 3, 8},
+				{-1, -1, 0, 6, 7},
+				{-1, -1, -1, 0, 5},
+				{-1, -1, -1, -1, 0}
+		};
+		printArrayToConsole(array);
+		System.out.println("The min cost is: "+ divideAndConquer(array, array.length - 1));
+//		generateRandomArray(SIZE15ARRAY);
+//		printArrayToConsole(SIZE15ARRAY);
+//		dynamicProgramming(SIZE15ARRAY);
 
 	}
 
@@ -33,8 +42,23 @@ public class Testing {
 	}
 	
 	//divide and conquer solution
-	private static void divideAndConquer(int[][] theArray) {
-
+	private static int divideAndConquer(int[][] theArray, int theCol) {
+		int col = theCol;
+		if (col == 1) { //base case
+			return theArray[0][1];
+		} else {
+			int row = -1;
+			int currentMinRow = 0;
+			for (int i = 0; i < theArray.length; i++ ) {
+				if (theArray[i][col] < theArray[currentMinRow][col] && theArray[i][col] != 0 && theArray[i][col] != -1) {
+					currentMinRow = i;
+				}
+				row = i;
+			}
+			return theArray[currentMinRow][row] + divideAndConquer(theArray, row);
+			
+		}
+//		return 0;/
 	}
 
 	//dynamic programming solution
