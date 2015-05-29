@@ -2,11 +2,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
 //TCSS 343 Assignment 5
-// Dennis Kenyon, Ben Cassidy, Audrey Chavarria
+// Dennis Kenyon, Ben Cassidy, Audrey Chavarria, Zheng Yang
 
 public class Testing {
 
@@ -16,23 +17,17 @@ public class Testing {
 	public static int[][] SIZE400ARRAY = new int[400][400];
 	public static int[][] SIZE600ARRAY = new int[600][600];
 	public static int[][] SIZE800ARRAY = new int[800][800];
-	public static int[][] SIZE15ARRAY = new int[15][15];
-
+	public static int[][] SIZE10ARRAY = new int[10][10];
+	
+	
+	static ArrayList<Integer> currentSolution = new ArrayList<Integer>();
+	
 	public static void main(final String[] theArgs) throws FileNotFoundException {
 
 		// initializeArrays();
-		int[][] array = {
-				{0, 3, 8, 4, 7},
-				{-1, 0, 2, 3, 8},
-				{-1, -1, 0, 6, 7},
-				{-1, -1, -1, 0, 5},
-				{-1, -1, -1, -1, 0}
-		};
-		printArrayToConsole(array);
-		System.out.println("The min cost is: "+ divideAndConquer(array, array.length - 1));
-//		generateRandomArray(SIZE15ARRAY);
-//		printArrayToConsole(SIZE15ARRAY);
-//		dynamicProgramming(SIZE15ARRAY);
+		generateRandomArray(SIZE10ARRAY);
+		printArrayToConsole(SIZE10ARRAY);
+		dynamicProgramming(SIZE10ARRAY);
 
 	}
 
@@ -41,24 +36,21 @@ public class Testing {
 
 	}
 	
-	//divide and conquer solution
-	private static int divideAndConquer(int[][] theArray, int theCol) {
-		int col = theCol;
-		if (col == 1) { //base case
-			return theArray[0][1];
-		} else {
-			int row = -1;
-			int currentMinRow = 0;
-			for (int i = 0; i < theArray.length; i++ ) {
-				if (theArray[i][col] < theArray[currentMinRow][col] && theArray[i][col] != 0 && theArray[i][col] != -1) {
-					currentMinRow = i;
-				}
-				row = i;
-			}
-			return theArray[currentMinRow][row] + divideAndConquer(theArray, row);
-			
+	// divide and conquer solution
+	private static int divideAndConquer(int[][] theArray, int theBeginCol, int theEndCol) {
+		if (theBeginCol == theEndCol || theBeginCol + 1 == theEndCol) {
+			return theArray[theBeginCol][theEndCol];			
 		}
-//		return 0;/
+		int currentMin = theArray[theBeginCol][theEndCol];
+
+		for (int i = theBeginCol + 1; i < theEndCol; i++) {
+			int cost = divideAndConquer(theArray, theBeginCol, i) + divideAndConquer(theArray, i, theEndCol);			
+			if (cost < currentMin) {
+				currentMin = cost;
+			}
+		}
+		System.out.println();
+		return currentMin;
 	}
 
 	//dynamic programming solution
