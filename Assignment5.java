@@ -163,9 +163,8 @@ public class Testing {
         totalTime += (finishTime - startTime);
         System.out.println("** Results for dynamic programming algorithm on " + theArray.length + "x" + theArray.length + "table: ");
         System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + currentMinDistances[theArray.length -1]);
-        System.out.println();
 		// get rid of Integer.MAX_VALUE's in backtrack array
-//		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
+		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
 		
 
 	}
@@ -181,8 +180,7 @@ public class Testing {
 			}
 			// System.out.println(); // debug purposes
 		}
-		System.out.println();
-		System.out.println("PATH TO YIELD MINIMUM COST:");
+		System.out.println("\tPath to yield minimum for cost dynamic programming:");
 		backtrack(theArray, theArray.length - 1, theArray.length - 1);
 	}
 	
@@ -191,13 +189,14 @@ public class Testing {
 		int row = theRow;
 		int col = theCol;
 		if (theRow == theArray.length - 1) {
-			System.out.println("	end");
+			System.out.println("\t\tend");
 		}
 		if (row == 0) {
-			System.out.println("	Post " + (row) + " to " + (col));
-			System.out.println("	start");
+			System.out.println("\t\tPost " + (row) + " to " + (col));
+			System.out.println("\t\tstart");
+			System.out.println();
 		} else if (theArray[row - 1][col] != theArray[row][col]) {
-			System.out.println("	Post " + (row) + " to " + (col));
+			System.out.println("\t\tPost " + (row) + " to " + (col));
 			backtrack(theArray, row - 1, row);
 		} else if (theArray[row - 1][col] == theArray[row][col]) {
 			backtrack(theArray, row - 1, col);
