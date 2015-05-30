@@ -1,8 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,49 +16,124 @@ public class Testing {
 	public static int[][] SIZE400ARRAY = new int[400][400];
 	public static int[][] SIZE600ARRAY = new int[600][600];
 	public static int[][] SIZE800ARRAY = new int[800][800];
-	public static int[][] SIZE10ARRAY = new int[10][10];
-	
-	
-	static ArrayList<Integer> currentSolution = new ArrayList<Integer>();
+	public static int[][] TESTARRAY = new int[20][20];
 	
 	public static void main(final String[] theArgs) throws FileNotFoundException {
 
-		// initializeArrays();
-		generateRandomArray(SIZE10ARRAY);
-		printArrayToConsole(SIZE10ARRAY);
-		dynamicProgramming(SIZE10ARRAY);
-
+//		initializeArrays();
+		generateRandomArray(TESTARRAY);
+		dynamicProgramming(TESTARRAY);
+		divideAndConquer(TESTARRAY);		
+		bruteForce(TESTARRAY);
 	}
 
-	//brute force solution
+	// brute force solution
 	private static void bruteForce(int[][] theArray) {
+		// timer variables
+		long totalTime = 0;
+		long startTime = 0;
+		long finishTime = 0;
 
+		// start the timer
+		Date startDate = new Date();
+		startTime = startDate.getTime();
+
+		//START BRUTE FORCE LOGIC
+		int lowestPossible = theArray[0][theArray.length - 1];
+		int currentMin = 0;
+//    	System.out.println(lowestPossible);
+//    	System.out.println(" ("+ 0 + ", " + 4 +") ");
+    	for(int s = theArray.length - 1, level = 1; s > 0; s--, level++){
+        int rows = (int) Math.pow(2,s);
+			int TOF, k;
+			for (int i = rows / 2 + 1; i < rows; i = i + 2) {
+				k = 0;
+				currentMin = 0;
+				for (int j = s - 1, l = level; j >= 0; j--, l++) {
+					TOF = (i / (int) Math.pow(2, j)) % 2;
+					if (TOF == 1) {
+						currentMin = currentMin + theArray[k][l];
+//						System.out.print(" (" + k + ", " + l + ") ");
+						k = l;
+					}
+				}
+				if (currentMin < lowestPossible) {
+					lowestPossible = currentMin;
+				}
+//				System.out.println("lowestPossible " + lowestPossible);
+			}
+		}
+    	//END BRUTE FORCE LOGIC
+    	
+    	// stop the timer
+        Date finishDate = new Date();
+        finishTime = finishDate.getTime();
+        totalTime += (finishTime - startTime);
+        System.out.println("** Results for brute force algorithm on " + theArray.length + "x" + theArray.length + "table: ");
+        System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + lowestPossible);
 	}
 	
-	// divide and conquer solution
-	private static int divideAndConquer(int[][] theArray, int theBeginCol, int theEndCol) {
+	
+	//divide and conquer solution
+	private static void divideAndConquer(int[][] theArray) {
+		// timer variables
+		long totalTime = 0;
+		long startTime = 0;
+		long finishTime = 0;
+		
+	
+		 // start the timer
+        Date startDate = new Date();
+        startTime = startDate.getTime();
+        
+        //START DIVIDE AND CONQUER LOGIC
+		int minimum = divideAndConquerHelper(theArray, 0, theArray.length - 1);
+		//END DIVIDE AND CONQUER LOGIC
+		
+		// stop the timer
+        Date finishDate = new Date();
+        finishTime = finishDate.getTime();
+        totalTime += (finishTime - startTime);
+        System.out.println("** Results for divide-and-conquer algorithm on " + theArray.length + "x" + theArray.length + "table: ");
+        System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + minimum);
+        System.out.println();
+	}
+	
+	// divide and conquer helper solution
+	private static int divideAndConquerHelper(int[][] theArray, int theBeginCol, int theEndCol) {
 		if (theBeginCol == theEndCol || theBeginCol + 1 == theEndCol) {
+			
 			return theArray[theBeginCol][theEndCol];			
 		}
 		int currentMin = theArray[theBeginCol][theEndCol];
 
 		for (int i = theBeginCol + 1; i < theEndCol; i++) {
-			int cost = divideAndConquer(theArray, theBeginCol, i) + divideAndConquer(theArray, i, theEndCol);			
+			int cost = divideAndConquerHelper(theArray, theBeginCol, i) + divideAndConquerHelper(theArray, i, theEndCol);
+//			System.out.println("divideAndConquerHelper(theArray, " + theBeginCol + ", " + i + ") + divideAndConquerHelper(theArray, " + i + ", " + theEndCol + "): " + cost);
 			if (cost < currentMin) {
 				currentMin = cost;
 			}
 		}
-		System.out.println();
 		return currentMin;
 	}
 
 	//dynamic programming solution
 	private static void dynamicProgramming(int[][] theArray) {
+		// timer variables
+		long totalTime = 0;
+		long startTime = 0;
+		long finishTime = 0;
+
+		// start the timer
+		Date startDate = new Date();
+		startTime = startDate.getTime();
+
 		//one dimensional array to keep track of current min count
 		int currentMinDistances[] = new int[theArray.length]; 
 		//two dimensional array populated for backtracking
 		int minBackTrack[][] = new int[theArray.length][theArray.length]; 
 		
+		//START DYNAMIC PROGRAMMING LOGIC
 		// initialize all elements to max possible integer
 		for (int i = 0; i < theArray.length; i++) {
 			currentMinDistances[i] = Integer.MAX_VALUE;
@@ -80,11 +154,18 @@ public class Testing {
 				}
 			}
 		}
-		System.out.println();
-		System.out.println("Minimum cost is : " + currentMinDistances[theArray.length -1]);
-
+		
+		//END DYNAMIC PROGRAMMING LOGIC
+		
+		// stop the timer
+        Date finishDate = new Date();
+        finishTime = finishDate.getTime();
+        totalTime += (finishTime - startTime);
+        System.out.println("** Results for dynamic programming algorithm on " + theArray.length + "x" + theArray.length + "table: ");
+        System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + currentMinDistances[theArray.length -1]);
+        System.out.println();
 		// get rid of Integer.MAX_VALUE's in backtrack array
-		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
+//		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
 		
 
 	}
