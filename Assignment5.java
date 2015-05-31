@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
@@ -16,16 +17,15 @@ public class Testing {
 	public static int[][] SIZE400ARRAY = new int[400][400];
 	public static int[][] SIZE600ARRAY = new int[600][600];
 	public static int[][] SIZE800ARRAY = new int[800][800];
-	public static int[][] TESTARRAY = new int[21][21];
-	static int size =0;
+	public static int[][] TESTARRAY = new int[15][15];
 	public static void main(final String[] theArgs) throws FileNotFoundException {
 
 //		initializeArrays();
 		generateRandomArray(TESTARRAY);
 		printArrayToConsole(TESTARRAY);
 		dynamicProgramming(TESTARRAY);
-		divideAndConquer(TESTARRAY);		
-//		bruteForce(TESTARRAY);
+		divideAndConquer(TESTARRAY);	
+		bruteForce(TESTARRAY);
 	}
 
 	// brute force solution
@@ -104,7 +104,7 @@ public class Testing {
 	// divide and conquer helper solution
 	private static int divideAndConquerHelper(int[][] theArray, int theBeginCol, int theEndCol) {
 		if (theBeginCol == theEndCol || theBeginCol + 1 == theEndCol) {
-			
+
 			return theArray[theBeginCol][theEndCol];			
 		}
 		int currentMin = theArray[theBeginCol][theEndCol];
@@ -137,20 +137,21 @@ public class Testing {
 		
 		//START DYNAMIC PROGRAMMING LOGIC
 		// initialize all elements to max possible integer
-		for (int i = 0; i < theArray.length; i++) {
+		for (int i = 0; i < theArray.length; i++) { //initialize elements in arrays
 			currentMinDistances[i] = Integer.MAX_VALUE;
 			for (int j = 0; j < theArray.length; j++) {
-				minBackTrack[i][j] = Integer.MAX_VALUE;
+				minBackTrack[i][j] = Integer.MAX_VALUE; //initialize everything to max possible integer to guarantee they will be replaced
 			}
-			minBackTrack[i][0] = 0;
+			minBackTrack[i][0] = 0; //initialize everything in the first column to 0, as a post to itself costs 0
 		}
 		currentMinDistances[0] = 0;
-		for (int i = 0; i < theArray.length; i++) {
-			for (int j = i + 1; j < theArray.length; j++) {
-				if (i == 0) {
+		for (int i = 0; i < theArray.length; i++) { //for each row
+			for (int j = i + 1; j < theArray.length; j++) { //for each column
+				if (i == 0) { //the first row of the helper 2d array is the exact same as the original
 					currentMinDistances[j] = currentMinDistances[i]	+ theArray[i][j];
 					minBackTrack[i][j] = currentMinDistances[i]	+ theArray[i][j];
-				} else if (currentMinDistances[j] > currentMinDistances[i] + theArray[i][j]) {
+				} else if (currentMinDistances[j] > currentMinDistances[i] + theArray[i][j]) { //for every other row
+					//helper array is previous helper array + the normal array
 					currentMinDistances[j] = currentMinDistances[i]	+ theArray[i][j];
 					minBackTrack[i][j] = currentMinDistances[j];
 				}
@@ -165,10 +166,7 @@ public class Testing {
         totalTime += (finishTime - startTime);
         System.out.println("** Results for dynamic programming algorithm on " + theArray.length + "x" + theArray.length + "table: ");
         System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + currentMinDistances[theArray.length -1]);
-		// get rid of Integer.MAX_VALUE's in backtrack array
 		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
-		
-
 	}
 
 	//traces the sequence that yields the minimum cost between canoe posts
@@ -183,7 +181,7 @@ public class Testing {
 			// System.out.println(); // debug purposes
 		}
 		System.out.println("\tPath to yield minimum for cost dynamic programming:");
-		backtrack(theArray, theArray.length - 1, theArray.length - 1);
+		backtrack(theArray, theArray.length - 1, theArray.length - 1); //actual recursive backtrack logic
 	}
 	
 	//prints to console a trace stack of the posts one must take to reach the end
@@ -197,11 +195,11 @@ public class Testing {
 			System.out.println("\t\tPost " + (row) + " to " + (col));
 			System.out.println("\t\tstart");
 			System.out.println();
-		} else if (theArray[row - 1][col] != theArray[row][col]) {
-			System.out.println("\t\tPost " + (row) + " to " + (col));
-			backtrack(theArray, row - 1, row);
-		} else if (theArray[row - 1][col] == theArray[row][col]) {
-			backtrack(theArray, row - 1, col);
+		} else if (theArray[row - 1][col] != theArray[row][col]) { //if above element is not equal to current
+			System.out.println("\t\tPost " + (row) + " to " + (col)); //it is used in the solution; print it
+			backtrack(theArray, row - 1, row); //point to one row up and to the current row's column
+		} else if (theArray[row - 1][col] == theArray[row][col]) { //if above element is equal to current element
+			backtrack(theArray, row - 1, col); //point to the next one above without considering its position
 		}
 
 	}
