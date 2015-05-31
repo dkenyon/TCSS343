@@ -16,15 +16,16 @@ public class Testing {
 	public static int[][] SIZE400ARRAY = new int[400][400];
 	public static int[][] SIZE600ARRAY = new int[600][600];
 	public static int[][] SIZE800ARRAY = new int[800][800];
-	public static int[][] TESTARRAY = new int[20][20];
-	
+	public static int[][] TESTARRAY = new int[21][21];
+	static int size =0;
 	public static void main(final String[] theArgs) throws FileNotFoundException {
 
 //		initializeArrays();
 		generateRandomArray(TESTARRAY);
+		printArrayToConsole(TESTARRAY);
 		dynamicProgramming(TESTARRAY);
 		divideAndConquer(TESTARRAY);		
-		bruteForce(TESTARRAY);
+//		bruteForce(TESTARRAY);
 	}
 
 	// brute force solution
@@ -73,6 +74,7 @@ public class Testing {
         System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + lowestPossible);
 	}
 	
+
 	
 	//divide and conquer solution
 	private static void divideAndConquer(int[][] theArray) {
