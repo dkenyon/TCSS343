@@ -2,6 +2,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,18 +23,54 @@ public class tcss343 {
 	public static int[][] SIZE800ARRAY = new int[800][800];
 	public static int[][] TESTARRAY = new int[15][15];
 	
+	static int size = 0;
 	static String path = "";
 	static int globleMin = 0;
 	//static String[] pathArr = new String[1000]; 
 	static List<costPath> list = new LinkedList<costPath>();
 	
 	public static void main(final String[] theArgs) throws FileNotFoundException {
-
-//		initializeArrays();
-		generateRandomArray(TESTARRAY);
-		dynamicProgramming(TESTARRAY);
-		divideAndConquer(TESTARRAY);		
-		bruteForce(TESTARRAY);
+		System.out.println("\nHello. Reading in files now...");
+		Scanner scanner = new Scanner(System.in);
+		int[] readInArray = new int[640000];
+		for (int i = 0; i < readInArray.length; i++) { //initialize all elements in readInArray to max possible integer
+			readInArray[i] = Integer.MAX_VALUE;
+		}
+		int counter = 0; //counter for every token in the input txt file
+		int tableN = 0; //this will be the dimension (n) of the table to be populated
+		//READ IN ALL TOKENS FROM INPUT TXT FILE
+		while (scanner.hasNext()) { 
+			String value = scanner.next();
+			if (value.equals("NA")) {
+				 readInArray[counter] = -1;
+			} else {
+				readInArray[counter] = Integer.parseInt(value);
+			}
+			counter++;
+		}
+		//END READ IN ALL TOKENS FROM INPUT TXT FILE
+		tableN = (int) Math.sqrt(counter); //this is the width and height of the array to be populated
+		int[][] theArray = new int[tableN][tableN]; //the two-dimensional array of costs from post to post
+		System.out.println("Size of 2D array: " + tableN + " x " + tableN);
+		System.out.println();
+		System.out.println();
+		counter = 0; //counter reset to 0 and used to keep help populate the 2D array
+		for (int i = 0; i < tableN; i++) { //this for loop populates theArray
+			for (int j = 0; j < tableN; j++) {
+				theArray[i][j] = readInArray[counter];
+				counter++;
+			}
+		}
+//		printArrayToConsole(theArray);
+		
+		//APPLY ALL ALGORITHMS TO THE TABLE AND FIND MINIMUM COST
+		dynamicProgramming(theArray);
+		if (theArray.length > 20) {
+			System.out.println("\n**NOTE: n > 20, so it will take some time for the minimums for divide-and-conquer and brute force to be found."
+					+ " Give it some time.");
+		}
+		bruteForce(theArray);
+		divideAndConquer(theArray);			
 	}
 
 	// brute force solution
@@ -110,12 +148,12 @@ public class tcss343 {
         	for (int i = 0; i < list.size(); i ++) {
             	
             	if (list.get(i).minCost == lowestPossible) {
-            	System.out.println( "\n		bruteforce backtracking\n		Lowest cost from : "+ list.get(i).minCost + "\n		Path: " + list.get(i).pathA );
+            	System.out.println( "\n		bruteforce backtracking path: " + list.get(i).pathA );
             	}
 			}
 		}
+        System.out.println();
 	}
-	
 	
 	//divide and conquer solution
 	private static void divideAndConquer(int[][] theArray) {
@@ -160,6 +198,7 @@ public class tcss343 {
 		return currentMin;
 	}
 
+	///////////////////////////////////////
 	//dynamic programming solution
 	private static void dynamicProgramming(int[][] theArray) {
 		// timer variables
