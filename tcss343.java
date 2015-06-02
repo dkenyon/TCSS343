@@ -80,13 +80,22 @@ public class tcss343 {
 		startTime = startDate.getTime();
 
 		//START BRUTE FORCE LOGIC
+		/*
+    	 * Algorithm Logic by Audrey
+    	 * This algorithm is based off on the idea of truth tables, as that is the pattern
+    	 * we found when we were trying to calculate the brute force paths
+    	 * */
 		int lowestPossible = theArray[0][theArray.length - 1];
 		int currentMin = 0;
 //    	System.out.println(lowestPossible);
 //    	System.out.println(" ("+ 0 + ", " + 4 +") ");
     	for(int s = theArray.length - 1, level = 1; s > 0; s--, level++){
         int rows = (int) Math.pow(2,s);
+        // TOF stands for True or False pattern, k stand for the row at which the algorithm will be 
+        // looking at. This K will be reseted every time the algorithm moves to the next column.
 			int TOF, k;
+			// i = (2^s)/2 possibilities, since we only care about the ones that start at post 1
+			// and  i = i+2, since we only look at the possibilities that also end at the final post 
 			for (int i = rows / 2 + 1; i < rows; i = i + 2) {
 				k = 0;
 				currentMin = 0;
