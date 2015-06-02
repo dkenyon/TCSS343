@@ -1,9 +1,6 @@
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,16 +11,7 @@ import java.util.Scanner;
 // Dennis Kenyon, Ben Cassidy, Audrey Chavarria, Zheng Yang
 
 public class tcss343 {
-
-	// the five different sized arrays to be tested on
-	public static int[][] SIZE100ARRAY = new int[100][100];
-	public static int[][] SIZE200ARRAY = new int[200][200];
-	public static int[][] SIZE400ARRAY = new int[400][400];
-	public static int[][] SIZE600ARRAY = new int[600][600];
-	public static int[][] SIZE800ARRAY = new int[800][800];
-	public static int[][] TESTARRAY = new int[15][15];
 	
-	static int size = 0;
 	static String path = "";
 	static int globleMin = 0;
 	//static String[] pathArr = new String[1000]; 
@@ -161,8 +149,7 @@ public class tcss343 {
 		long totalTime = 0;
 		long startTime = 0;
 		long finishTime = 0;
-		
-	
+
 		 // start the timer
         Date startDate = new Date();
         startTime = startDate.getTime();
@@ -189,8 +176,7 @@ public class tcss343 {
 		int currentMin = theArray[theBeginCol][theEndCol];
 
 		for (int i = theBeginCol + 1; i < theEndCol; i++) {
-			int cost = divideAndConquerHelper(theArray, theBeginCol, i) + divideAndConquerHelper(theArray, i, theEndCol);
-//			System.out.println("divideAndConquerHelper(theArray, " + theBeginCol + ", " + i + ") + divideAndConquerHelper(theArray, " + i + ", " + theEndCol + "): " + cost);
+			int cost = divideAndConquerHelper(theArray, theBeginCol, i) + divideAndConquerHelper(theArray, i, theEndCol); //call recursive helper
 			if (cost < currentMin) {
 				currentMin = cost;
 			}
@@ -198,7 +184,6 @@ public class tcss343 {
 		return currentMin;
 	}
 
-	///////////////////////////////////////
 	//dynamic programming solution
 	private static void dynamicProgramming(int[][] theArray) {
 		// timer variables
@@ -225,6 +210,7 @@ public class tcss343 {
 			minBackTrack[i][0] = 0;
 		}
 		currentMinDistances[0] = 0;
+		//populate 2D helper array with a "running minimum" count for that specific row/column
 		for (int i = 0; i < theArray.length; i++) {
 			for (int j = i + 1; j < theArray.length; j++) {
 				if (i == 0) {
@@ -236,19 +222,17 @@ public class tcss343 {
 				}
 			}
 		}
-		
 		//END DYNAMIC PROGRAMMING LOGIC
 		
 		// stop the timer
         Date finishDate = new Date();
         finishTime = finishDate.getTime();
         totalTime += (finishTime - startTime);
+       
         System.out.println("** Results for dynamic programming algorithm on " + theArray.length + "x" + theArray.length + "table: ");
         System.out.println("\tTOTAL TIME: " + totalTime + " ms.\t MINIMUM COST: " + currentMinDistances[theArray.length -1]);
 		// get rid of Integer.MAX_VALUE's in backtrack array
 		backtrackTrace(minBackTrack); //trace the sequence that yields the minimum cost between canoe posts
-		
-
 	}
 
 	//traces the sequence that yields the minimum cost between canoe posts
@@ -296,18 +280,18 @@ public class tcss343 {
 	// populates all five arrays and writes them to txt files
 	private static void initializeArrays() throws FileNotFoundException {
 		//instantiate arrays
-		generateRandomArray(SIZE100ARRAY); 
-		generateRandomArray(SIZE200ARRAY);
-		generateRandomArray(SIZE400ARRAY);
-		generateRandomArray(SIZE600ARRAY);
-		generateRandomArray(SIZE800ARRAY);
+//		generateRandomArray(SIZE100ARRAY); 
+//		generateRandomArray(SIZE200ARRAY);
+//		generateRandomArray(SIZE400ARRAY);
+//		generateRandomArray(SIZE600ARRAY);
+//		generateRandomArray(SIZE800ARRAY);
 		
 		//write the instantiated arrays to .txt files
-		writeArrayToFile(SIZE100ARRAY);
-		writeArrayToFile(SIZE200ARRAY);
-		writeArrayToFile(SIZE400ARRAY);
-		writeArrayToFile(SIZE600ARRAY);
-		writeArrayToFile(SIZE800ARRAY);
+//		writeArrayToFile(SIZE100ARRAY);
+//		writeArrayToFile(SIZE200ARRAY);
+//		writeArrayToFile(SIZE400ARRAY);
+//		writeArrayToFile(SIZE600ARRAY);
+//		writeArrayToFile(SIZE800ARRAY);
 	}
 
 	// writes the passed array to a tab-delimited file (if theArray[i][j] == -1,
