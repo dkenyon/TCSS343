@@ -43,8 +43,8 @@ public class YayDynamic {
 			M[i][0] = O[i][0];
 		}
 		
-		for (int j = 1; j < O.length; j++) { //for each row
-			for (int i = 0; i < O.length; i++) { //for each column starting with the second
+		for (int j = 1; j < O.length; j++) { //for each column starting with the second
+			for (int i = 0; i < O.length; i++) { //for each row
 				if (i == 0) {
 					M[i][j] = Integer.min(M[i][j-1], M[i+1][j-1]) + O[i][j];
 				} else if (i > 0 && i < O.length-1) {
